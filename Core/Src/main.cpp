@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Sensors/SHTC3.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
