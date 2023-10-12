@@ -13,6 +13,9 @@ public:
     virtual bool init() = 0;
 
     virtual bool getData(void *data) = 0;
+
+private:
+
 };
 
 
