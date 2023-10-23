@@ -35,6 +35,11 @@ private:
     bool readCommand(uint16_t command, uint8_t *data, const size_t len);
 
     bool writeCommand(uint16_t command, uint8_t *data, const size_t len);
+
+protected:
+    bool transmit(uint8_t *data, const size_t len) override;
+
+    bool receive(uint8_t *data, const size_t len) override;
 };
 
 #endif // SHTC3_H

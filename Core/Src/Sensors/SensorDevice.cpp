@@ -40,18 +40,3 @@ bool SensorDevice::receive(uint8_t *data, const size_t len) {
     return true;
 }
 
-bool SensorDevice::transmit(uint8_t *data, const size_t len, const uint8_t writeAddress) {
-    if (HAL_OK != HAL_I2C_Master_Transmit(&hi2c1, writeAddress, data, len, 1000)) {
-        return false;
-    }
-
-    return true;
-}
-
-bool SensorDevice::receive(uint8_t *data, const size_t len, const uint8_t readAddress) {
-    if (HAL_OK != HAL_I2C_Master_Receive(&hi2c1, readAddress, data, len, 1000)) {
-        return false;
-    }
-
-    return true;
-}

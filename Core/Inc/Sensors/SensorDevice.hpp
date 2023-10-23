@@ -53,24 +53,6 @@ protected:
      * @return Successful Operation
      */
     virtual bool receive(uint8_t *data, const size_t len);
-
-    /**
-     * Transmit data to the sensor
-     * @param data[in] - Data to transmit
-     * @param len[in] - Size of data to transmit
-     * @param writeAddress[in] - Address to write to
-     * @return Successful Operation
-     */
-    virtual bool transmit(uint8_t *data, const size_t len, const uint8_t writeAddress);
-
-    /**
-     * Receive data from the sensor
-     * @param data[out] - Buffer to store data in
-     * @param len[in] - Size of data to receive
-     * @param readAddress[in] - Address to read from
-     * @return Successful Operation
-     */
-    virtual bool receive(uint8_t *data, const size_t len, const uint8_t readAddress);
 };
 
 
