@@ -1,3 +1,4 @@
+#include <cstddef>
 #include "Sensors/SHTC3.hpp"
 
 
@@ -10,4 +11,3 @@ bool init() {
 bool getData(SHTC3::SHTC3_DATA_T *data) {
     return true;
 }
-

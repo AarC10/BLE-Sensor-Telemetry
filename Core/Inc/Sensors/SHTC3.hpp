@@ -1,11 +1,17 @@
-//
-// Created by aaron on 9/26/23.
-//
+/**
+ * @file SHTC3.hpp
+ *
+ * @brief SHTC3 Sensor Driver
+ * @author Aaron Chan
+ */
 
 #ifndef SHTC3_H
 #define SHTC3_H
 
-class SHTC3 {
+#include <cstdint>
+#include "SensorDevice.hpp"
+
+class SHTC3 : public SensorDevice {
 public:
     typedef struct {
         float temperature;
@@ -18,6 +24,8 @@ public:
 
     bool getData(SHTC3_DATA_T *data);
 
+private:
+    const uint8_t SHTC3_ADDRESS = 0x70 << 1;
 };
 
 #endif // SHTC3_H
