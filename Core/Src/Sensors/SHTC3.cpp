@@ -17,24 +17,31 @@ bool SHTC3::getData(SHTC3::SHTC3_DATA_T *data) {
     return true;
 }
 
-bool SHTC3::readCommand(uint16_t command, uint8_t *data, const size_t len) {
-    bool ret = transmit((uint8_t *) &command, 2);
-
-    if (ret) {
-        ret = receive(data, len);
-    }
-
-    return ret;
+bool SHTC3::wakeup() {
+    static uint8_t constexpr command = (0b00110101 << 8) | 0b00010111;
+    return writeCommand(command, nullptr, 0);
 }
 
-bool SHTC3::writeCommand(uint16_t command, uint8_t *data, const size_t len) {
-    bool ret = transmit((uint8_t *) &command, 2);
+bool SHTC3::measurement() {
+    static uint8_t constexpr command = (0b01011100 << 8) | 0b00100100;
+    return writeCommand(command, nullptr, 0);
+}
 
-    if (ret) {
-        ret = transmit(data, len);
-    }
+bool SHTC3::read_out(uint8_t *data, const size_t len) {
+    return readCommand(data, len);
+}
 
-    return ret;
+bool SHTC3::sleep() {
+    static uint8_t constexpr command = (0b10110111 << 8) | 0b10011000;
+    return writeCommand(command, nullptr, 0);
+}
+
+bool SHTC3::readCommand(uint8_t *data, const size_t len) {
+    return receive(data, len);
+}
+
+bool SHTC3::writeCommand(uint16_t command) {
+    return transmit((uint8_t *) &command, 2);
 }
 
 bool SHTC3::transmit(uint8_t *data, const size_t len) {

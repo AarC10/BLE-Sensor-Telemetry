@@ -32,14 +32,23 @@ private:
     const uint8_t SHTC3_ADDRESS = 0x70 << 1;
     const uint8_t i2cAddress;
 
-    bool readCommand(uint16_t command, uint8_t *data, const size_t len);
+    bool wakeup();
 
-    bool writeCommand(uint16_t command, uint8_t *data, const size_t len);
+    bool measurement();
+
+    bool read_out(uint8_t *data, const size_t len);
+
+    bool sleep();
+
+    bool readCommand(uint8_t *data, const size_t len);
+
+    bool writeCommand(uint16_t command);
 
 protected:
     bool transmit(uint8_t *data, const size_t len) override;
 
     bool receive(uint8_t *data, const size_t len) override;
+
 };
 
 #endif // SHTC3_H
