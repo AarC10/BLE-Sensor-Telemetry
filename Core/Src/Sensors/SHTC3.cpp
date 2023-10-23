@@ -11,7 +11,16 @@ bool SHTC3::init() {
 }
 
 bool SHTC3::getData(SHTC3::SHTC3_DATA_T *data) {
-    readReg(0x00, (uint8_t *) data, sizeof(SHTC3_DATA_T)); // TODO: Figure out address
+
 
     return true;
+}
+
+bool SHTC3::readCommand(uint16_t command, uint8_t *data, const size_t len) {
+    bool ret = transmit((uint8_t *) &command, 2);
+
+}
+
+bool SHTC3::writeCommand(uint16_t command, uint8_t *data, const size_t len) {
+
 }

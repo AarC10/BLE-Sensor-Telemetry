@@ -31,6 +31,10 @@ public:
 private:
     const uint8_t SHTC3_ADDRESS = 0x70 << 1;
     const uint8_t i2cAddress;
+
+    bool readCommand(uint16_t command, uint8_t *data, const size_t len);
+
+    bool writeCommand(uint16_t command, uint8_t *data, const size_t len);
 };
 
 #endif // SHTC3_H
