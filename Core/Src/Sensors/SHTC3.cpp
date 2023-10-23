@@ -8,23 +8,29 @@ extern I2C_HandleTypeDef hi2c1;
 SHTC3::SHTC3(const uint8_t address) : i2cAddress(address) {}
 
 bool SHTC3::init() {
+    // TODO: Chip ID
+
     return true;
 }
 
 bool SHTC3::getData(SHTC3::SHTC3_DATA_T *data) {
+    if (!wakeup()) return false;
+    if (!measurement()) return false;
+//    if (read_out(buffer, 6)) {
+//        // TODO: Figure this out
+//    }
 
+    if (!sleep()) return false;
 
     return true;
 }
 
 bool SHTC3::wakeup() {
-    static uint8_t constexpr command = (0b00110101 << 8) | 0b00010111;
-    return writeCommand(command, nullptr, 0);
+    return writeCommand((0b00110101 << 8) | 0b00010111);
 }
 
 bool SHTC3::measurement() {
-    static uint8_t constexpr command = (0b01011100 << 8) | 0b00100100;
-    return writeCommand(command, nullptr, 0);
+    return writeCommand((0b01011100 << 8) | 0b00100100);
 }
 
 bool SHTC3::read_out(uint8_t *data, const size_t len) {
@@ -32,8 +38,7 @@ bool SHTC3::read_out(uint8_t *data, const size_t len) {
 }
 
 bool SHTC3::sleep() {
-    static uint8_t constexpr command = (0b10110111 << 8) | 0b10011000;
-    return writeCommand(command, nullptr, 0);
+    return writeCommand((0b10110111 << 8) | 0b10011000);
 }
 
 bool SHTC3::readCommand(uint8_t *data, const size_t len) {
