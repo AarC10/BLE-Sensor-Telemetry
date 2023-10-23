@@ -17,7 +17,7 @@ public:
 
     virtual bool getData(void *data) = 0;
 
-private:
+protected:
     uint8_t address;
 
     /**
