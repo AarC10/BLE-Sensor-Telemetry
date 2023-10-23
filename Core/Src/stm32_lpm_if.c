@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32_lpm_if.h"
+#include "stm32_lpm.h"
 #include "app_conf.h"
 /* USER CODE BEGIN include */
 

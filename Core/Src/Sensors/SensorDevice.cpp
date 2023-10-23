@@ -2,7 +2,6 @@
 // Created by aaron on 10/7/23.
 //
 
-#include "SensorDevice.hpp"
 #include "Sensors/SensorDevice.hpp"
 #include "stm32wbxx_hal.h"
 
