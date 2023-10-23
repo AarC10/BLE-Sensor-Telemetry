@@ -20,20 +20,27 @@ bool SHTC3::getData(SHTC3::SHTC3_DATA_T *data) {
 bool SHTC3::readCommand(uint16_t command, uint8_t *data, const size_t len) {
     bool ret = transmit((uint8_t *) &command, 2);
 
+    if (ret) {
+        ret = receive(data, len);
+    }
+
+    return ret;
 }
 
 bool SHTC3::writeCommand(uint16_t command, uint8_t *data, const size_t len) {
+    bool ret = transmit((uint8_t *) &command, 2);
 
+    if (ret) {
+        ret = transmit(data, len);
+    }
+
+    return ret;
 }
 
 bool SHTC3::transmit(uint8_t *data, const size_t len) {
-    if (HAL_OK != HAL_I2C_Master_Transmit(&hi2c1, i2cAddress, data, len, 1000)) {
-        return false;
-    }
+    return HAL_OK != HAL_I2C_Master_Transmit(&hi2c1, i2cAddress, data, len, 1000);
 }
 
 bool SHTC3::receive(uint8_t *data, const size_t len) {
-    if (HAL_OK != HAL_I2C_Master_Receive(&hi2c1, i2cAddress | 0b1, data, len, 1000)) {
-        return false;
-    }
+    return HAL_OK != HAL_I2C_Master_Receive(&hi2c1, i2cAddress | 0b1, data, len, 1000);
 }
