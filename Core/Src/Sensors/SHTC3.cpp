@@ -49,10 +49,8 @@ bool SHTC3::writeCommand(uint16_t command) {
 
 bool SHTC3::transmit(uint8_t *data, const size_t len) {
     return HAL_OK != HAL_I2C_Master_Transmit(&hi2c1, i2cAddress, data, len, 1000);
-//    return false;
 }
 
 bool SHTC3::receive(uint8_t *data, const size_t len) {
-//    return false;
     return HAL_OK != HAL_I2C_Master_Receive(&hi2c1, i2cAddress | 0b1, data, len, 1000);
 }
