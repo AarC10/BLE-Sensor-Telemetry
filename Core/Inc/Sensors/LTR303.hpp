@@ -7,7 +7,28 @@
 #define LTR303_H
 
 
-class LTR303 {
+#include "SensorDevice.hpp"
+
+class LTR303 : public SensorDevice {
+    typedef enum {
+        CONTROL_REG = 0x80,
+        ALS_MEAS_RATE_REG = 0x85,
+        PART_ID_REG = 0x86,
+        MANUFAC_ID_REG = 0x07,
+        ALS_DATA_CH1_0_REG = 0x88,
+        ALS_DATA_CH1_1_REG = 0x89,
+        ALS_DATA_CH0_0_REG = 0x8A,
+        ALS_DATA_CH0_1_REG = 0x8B,
+        ALS_STATUS_REG = 0x8C,
+        INTERRUPT_REG = 0x8F,
+        ALS_THRES_UP_0_REG = 0x97,
+        ALS_THRES_UP_1_REG = 0x98,
+        ALS_THRES_LOW_0_REG = 0x99,
+        ALS_THRES_LOW_1_REG = 0x9A,
+        INTERRUPT_PERSIST_REG = 0x9E,
+    } LTR303Register;
+
+
 
 };
 
