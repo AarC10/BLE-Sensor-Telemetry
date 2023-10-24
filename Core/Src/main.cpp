@@ -21,10 +21,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "Sensors/SHTC3.hpp"
-//#include "Sensors/LPS22HB.hpp"
-//#include "Sensors/GX21M15.hpp"
-//#include "Sensors/LTR303.hpp"
+#include "Sensors/SHTC3.hpp"
+#include "Sensors/LPS22HB.hpp"
+#include "Sensors/GX21M15.hpp"
+#include "Sensors/LTR303.hpp"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
