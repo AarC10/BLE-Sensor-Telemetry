@@ -35,7 +35,7 @@ public:
         uint16_t visible_light;
     } LTR303_DATA_T;
 
-    LTR303() = default;
+    LTR303() : SensorDevice(LTR303_ADDRESS) {};
 
     bool init() override;
 
@@ -44,7 +44,7 @@ public:
     bool getData(void *data) override;
 
 private:
-    const uint8_t LTR303_ADDRESS = 0x29 << 1;
+    static constexpr uint8_t LTR303_ADDRESS = 0x29 << 1;
 };
 
 #endif //LTR303_H

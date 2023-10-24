@@ -11,7 +11,9 @@
 
 class SensorDevice {
 public:
-    SensorDevice() {}
+    SensorDevice(const uint8_t address) {
+        this->address = address;
+    }
 
     virtual bool init() = 0;
 

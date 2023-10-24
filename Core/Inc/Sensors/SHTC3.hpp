@@ -22,15 +22,14 @@ public:
         float humidity;
     } SHTC3_DATA_T;
 
-    SHTC3(uint8_t address);
+    SHTC3(uint8_t address) : SensorDevice(address) {};
 
     bool init();
 
     bool getData(SHTC3_DATA_T *data);
 
 private:
-    const uint8_t SHTC3_ADDRESS = 0x70 << 1;
-    const uint8_t i2cAddress;
+    static constexpr uint8_t SHTC3_ADDRESS = 0x70 << 1;
 
     bool wakeup();
 
