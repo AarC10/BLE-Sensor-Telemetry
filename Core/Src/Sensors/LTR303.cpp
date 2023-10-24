@@ -25,12 +25,13 @@ bool LTR303::init() {
     return setActive(true);
 }
 
-bool LTR303::getData(LTR303::LTR303_DATA_T *data) {
+bool LTR303::getData(void *data) {
     uint8_t reg_data[4] = {0};
+    LTR303_DATA_T *sensor_data = reinterpret_cast<LTR303_DATA_T*>(data);
 
     if (readReg(ALS_DATA_CH1_0_REG, reg_data, 4)) {
-        data->infrared_light = (reg_data[1] << 8) | reg_data[0];
-        data->visible_light = (reg_data[3] << 8) | reg_data[2];
+        sensor_data->infrared_light = (reg_data[1] << 8) | reg_data[0];
+        sensor_data->visible_light = (reg_data[3] << 8) | reg_data[2];
         return true;
     }
 

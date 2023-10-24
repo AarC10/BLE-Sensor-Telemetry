@@ -41,7 +41,7 @@ public:
 
     bool setActive(bool isActive);
 
-    bool getData(LTR303_DATA_T *data);
+    bool getData(void *data) override;
 
 private:
     const uint8_t LTR303_ADDRESS = 0x29 << 1;
