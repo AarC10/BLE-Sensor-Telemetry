@@ -10,6 +10,8 @@
 #include "SensorDevice.hpp"
 
 class LTR303 : public SensorDevice {
+public:
+
     typedef enum {
         CONTROL_REG = 0x80,
         ALS_MEAS_RATE_REG = 0x85,
@@ -26,11 +28,23 @@ class LTR303 : public SensorDevice {
         ALS_THRES_LOW_0_REG = 0x99,
         ALS_THRES_LOW_1_REG = 0x9A,
         INTERRUPT_PERSIST_REG = 0x9E,
-    } LTR303Register;
+    } LTR303_REG_T;
 
+    typedef struct {
+        uint16_t infrared_light;
+        uint16_t visible_light;
+    } LTR303_DATA_T;
 
+    LTR303() = default;
 
+    bool init() override;
+
+    bool setActive(bool isActive);
+
+    bool getData(LTR303_DATA_T *data);
+
+private:
+    const uint8_t LTR303_ADDRESS = 0x29 << 1;
 };
-
 
 #endif //LTR303_H
