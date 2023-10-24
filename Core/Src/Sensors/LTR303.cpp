@@ -22,8 +22,7 @@ bool LTR303::init() {
 
     HAL_Delay(100);
 
-    // Turn to active mode. Rest of the bits are defaulted to 0 so no need to OR
-    return writeReg(LTR303::CONTROL_REG, reinterpret_cast<uint8_t *>(0b1), 1);
+    return setActive(true);
 }
 
 bool LTR303::getData(LTR303::LTR303_DATA_T *data) {
@@ -32,5 +31,12 @@ bool LTR303::getData(LTR303::LTR303_DATA_T *data) {
 }
 
 bool LTR303::setActive(bool isActive) {
+    uint8_t control_reg = 0;
+    if (!readReg(LTR303::CONTROL_REG, &control_reg, 1)) {
+        return false;
+    }
 
+    control_reg = isActive ? control_reg | 0b1 : control_reg & ~0b1;
+
+    return writeReg(LTR303::CONTROL_REG, &control_reg, 1);
 }
