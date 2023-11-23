@@ -3,11 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#include "zephyr/device.h"
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/sensor.h>
 #include <app_version.h>
 
+#include <zephyr/bluetooth/bluetooth.h>
+#include <zephyr/bluetooth/hci.h>
+
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/led.h>
+
 #include <zephyr/logging/log.h>
+
 LOG_MODULE_REGISTER(main, CONFIG_APP_LOG_LEVEL);
 
 static void sensor_task(void *unused0, void *unused1, void *unused2) {
@@ -43,6 +51,20 @@ static void sensor_task(void *unused0, void *unused1, void *unused2) {
 
 
 int main(void) {
+    static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
+
+    int ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
+	if (ret < 0) {
+		return 0;
+	}
+
+	while (1) {
+		ret = gpio_pin_toggle_dt(&led);
+		if (ret < 0) {
+			return 0;
+		}
+		k_msleep(100);
+	}
 
 	return 0;
 }
