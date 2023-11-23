@@ -53,7 +53,18 @@ static void sensor_task(void *unused0, void *unused1, void *unused2) {
 int main(void) {
     static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 
-    int ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
+    uint8_t adv_data[] = {0xff, 0xff, 0x00};
+
+	int ret = bt_enable(NULL);
+	if (ret) {
+		printk("Bluetooth init failed (err %d)\n", ret);
+		return 0;
+	}
+
+	printk("Bluetooth initialized\n");
+
+
+    ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
 	if (ret < 0) {
 		return 0;
 	}
@@ -63,7 +74,20 @@ int main(void) {
 		if (ret < 0) {
 			return 0;
 		}
-		k_msleep(100);
+	
+        ret = bt_le_adv_start(BT_LE_ADV_NCONN, adv_data, ARRAY_SIZE(adv_data), NULL, 0);
+		if (ret) {
+			printk("Advertising failed to start (err %d)\n", ret);
+		}
+
+		k_msleep(1000);
+
+		ret = bt_le_adv_stop();
+		if (ret) {
+			printk("Advertising failed to stop (err %d)\n", ret);
+		}
+
+        k_msleep(1000);
 	}
 
 	return 0;
