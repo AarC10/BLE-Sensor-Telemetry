@@ -55,6 +55,7 @@ int main(void) {
 
     uint8_t adv_data[] = {0xff, 0xff, 0x00};
 
+    printk("Enabling Bluetooth\n");
 	int ret = bt_enable(NULL);
 	if (ret) {
 		printk("Bluetooth init failed (err %d)\n", ret);
