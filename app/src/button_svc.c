@@ -66,7 +66,7 @@ int button_init(gpio_callback_handler_t handler) {
 
 	}
 
-    if (handler == NULL) handler = default_button_callback;
+    handler = default_button_callback;
 
 	gpio_init_callback(&gpio_cb, handler, BIT(button.pin));
 	gpio_add_callback(button.port, &gpio_cb);

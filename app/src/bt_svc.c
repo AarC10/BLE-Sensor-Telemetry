@@ -10,6 +10,8 @@
 
 #include "bt_svc.h"
 #include "led_svc.h"
+#include "sensor_svc.h"
+#include "zephyr/bluetooth/gatt.h"
 
 
 #define DEVICE_NAME CONFIG_BT_DEVICE_NAME
@@ -21,7 +23,8 @@ LOG_MODULE_REGISTER(bt_svc);
 struct bt_conn *ble_conn;
 volatile bool notify_enable;
 
-extern uint16_t but_val;  
+extern uint16_t but_val; 
+extern SENSOR_DATA_T readings;
 
 
 BT_CONN_CB_DEFINE(conn_callbacks) = {
@@ -31,15 +34,23 @@ BT_CONN_CB_DEFINE(conn_callbacks) = {
 
 /* ST Custom Service  */
 struct bt_uuid_128 st_service_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x0000fe40, 0xcc7a, 0x482a, 0x984a, 0x7f2ed5b3e58f));
+	BT_UUID_128_ENCODE(0x0000fe40, 0xcc7a, 0x482a, 0x984a, 0x7f2ed5b3e58f)
+);
 
 /* ST LED service */
 struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x0000fe41, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19));
+	BT_UUID_128_ENCODE(0x0000fe41, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
+);
 
 /* ST Notify button service */
 struct bt_uuid_128 but_notif_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x0000fe42, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19));
+	BT_UUID_128_ENCODE(0x0000fe42, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
+);
+
+/* AmbiSens Sensor Readings Service */
+struct bt_uuid_128 sensor_service_uuid = BT_UUID_INIT_128(
+	BT_UUID_128_ENCODE(0x0000fe43, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
+);
 
 
 /* Advertising data */
@@ -74,6 +85,8 @@ BT_GATT_SERVICE_DEFINE(stsensor_svc,
 
                     BT_GATT_CHARACTERISTIC(&but_notif_uuid.uuid, BT_GATT_CHRC_NOTIFY, 
                                            BT_GATT_PERM_READ, NULL, NULL, &but_val),
+
+                    // BT_GATT_CHARACTERISTIC(&sensor_service_uuid.uuid, BT_GATT_CHRC_BROADCAST, BT_GATT_PERM_READ, NULL, NULL, &readings),
 
                     BT_GATT_CCC(mpu_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 );
@@ -137,5 +150,5 @@ int bt_init() {
 }
 
 int bt_handle_button_cb(uint16_t *but_val) {
-    return bt_gatt_notify(NULL, &stsensor_svc.attrs[4], &but_val, sizeof(but_val));
+    return bt_gatt_notify(NULL, &stsensor_svc.attrs[4], but_val, sizeof(but_val));
 }

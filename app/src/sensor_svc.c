@@ -63,13 +63,10 @@ static void update_lps22hb_readings(void *unused0, void *unused1, void *unused2)
         // if (sensor_sample_fetch(device)) {
         //      printk("LPS22HB: Failed to get data");
         // }
-        //
+
         // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
         // sensor_channel_get(device, SENSOR_CHAN_PRESS, &pressure);
-
-        readings.lps22hb_temp = sensor_value_to_float(&temperature);
-        readings.lps22hb_press = sensor_value_to_float(&pressure);
-
+ 
 
         k_msleep(100);
     }
@@ -99,13 +96,13 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
 static void print_readings(void *unused, void *unused1, void *unused2) {
     while (1) {
         MOVE_CURSOR_STR(1, 1);
-        printk("TMP117: %f C\n", readings.tmp117_temp);
+        printk("TMP117: %f C", readings.tmp117_temp);
         
         MOVE_CURSOR_STR(2, 1);
-        printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
+        printk("LPS22HB: %f C\t %f Pa", readings.lps22hb_temp, readings.lps22hb_press);
         
         MOVE_CURSOR_STR(3, 1);
-        printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
+        printk("SHT30D: %f C\t %f%%", readings.sht30d_temp, readings.sht30d_hum);
         k_msleep(100);
     }
 }
