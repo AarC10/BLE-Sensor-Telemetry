@@ -1,8 +1,19 @@
 #include "sensor_svc.h"
 #include "zephyr/device.h"
 #include "zephyr/drivers/sensor.h"
+#include "zephyr/kernel.h"
+#include "zephyr/kernel/thread_stack.h"
+#include "zephyr/sys/arch_interface.h"
+
+#define STACK_SIZE (512)
+#define NUM_SENSORS 3
+
+static K_THREAD_STACK_ARRAY_DEFINE(sensor_stacks, NUM_SENSORS, STACK_SIZE);
+static struct k_thread sensor_threads[NUM_SENSORS] = {0};
 
 SENSOR_DATA_T readings = {0};
+
+
 
 int check_dev(const struct device *device) {
     int ret = device_is_ready(device);
@@ -88,9 +99,10 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
 
 
 int sensor_init() {
-    // update_sht30d_readings(NULL, NULL, NULL);
-    // update_tmp117_readings(NULL, NULL, NULL);
-    update_lps22hb_readings(NULL, NULL, NULL);
+    k_thread_entry_t sensor_tasks[] = {update_sht30d_readings, update_lps22hb_readings, update_tmp117_readings};
+    for (int i = 0; i < NUM_SENSORS; i++) {
+        k_thread_create(&sensor_threads[i], &sensor_stacks[i][0], STACK_SIZE, sensor_tasks[i], NULL, NULL, NULL, K_PRIO_PREEMPT(0), 0, K_NO_WAIT);
+    }
     
     return 0;
 }
