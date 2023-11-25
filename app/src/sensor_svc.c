@@ -7,6 +7,7 @@
 
 #define STACK_SIZE (512)
 #define NUM_SENSORS 3
+#define MOVE_CURSOR_STR(row, col) printf("\x1b[%d;%dH", row, col)
 
 static K_THREAD_STACK_ARRAY_DEFINE(sensor_stacks, NUM_SENSORS, STACK_SIZE);
 static struct k_thread sensor_threads[NUM_SENSORS] = {0};
@@ -97,10 +98,15 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
 
 static void print_readings(void *unused, void *unused1, void *unused2) {
     while (1) {
+        MOVE_CURSOR_STR(1, 1);
         printk("TMP117: %f C\n", readings.tmp117_temp);
+        
+        MOVE_CURSOR_STR(2, 1);
         printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
+        
+        MOVE_CURSOR_STR(3, 1);
         printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
-        k_msleep(500);
+        k_msleep(100);
     }
 }
 
