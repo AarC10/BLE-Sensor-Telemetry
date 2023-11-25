@@ -10,15 +10,15 @@
 	clock-frequency = <I2C_BITRATE_FAST>;
 
 
-    bmp388: bmp388@48 {
+    bmp388: bmp388@77 {
     	compatible = "bosch,bmp388";
-	    reg = <0x48>;
+	    reg = <0x77>;
   	    status = "okay";
     };
 
-    tmp117: tmp117@01 {
+    tmp117: tmp117@48 {
     	compatible = "ti,tmp116";
-	    reg = <0x01>;
+	    reg = <0x48>;
   	    status = "okay";
    		
         #address-cells = <1>;
