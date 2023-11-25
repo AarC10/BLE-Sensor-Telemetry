@@ -18,7 +18,7 @@ SENSOR_DATA_T readings = {0};
 int check_dev(const struct device *device) {
     int ret = device_is_ready(device);
 
-    if (ret) printk("Error %d: %s is not ready", ret, device->name);
+    if (ret) printk("Error %d: %s is not ready\n", ret, device->name);
 
     return ret;
 }
@@ -31,18 +31,19 @@ static void update_sht30d_readings(void *unused0, void *unused1, void *unused2) 
     struct sensor_value humidity;
 
     int ret = device_is_ready(device);
-    if (ret) printk("Error %d: %s is not ready", ret, device->name);
+    if (ret) printk("Error %d: %s is not ready\n", ret, device->name);
     
     while (1) {
-        if (sensor_sample_fetch(device)) continue;
-
-        sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
-        sensor_channel_get(device, SENSOR_CHAN_HUMIDITY, &humidity);
-
-        readings.sht30d_temp = sensor_value_to_float(&temperature);
-        readings.sht30d_hum  = sensor_value_to_float(&humidity);
-
-        printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
+        printk("SHT30D task executing\n");
+        // if (sensor_sample_fetch(device)) continue;
+        //
+        // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
+        // sensor_channel_get(device, SENSOR_CHAN_HUMIDITY, &humidity);
+        //
+        // readings.sht30d_temp = sensor_value_to_float(&temperature);
+        // readings.sht30d_hum  = sensor_value_to_float(&humidity);
+        //
+        // printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
         k_msleep(100);
     }
 }
@@ -54,21 +55,22 @@ static void update_lps22hb_readings(void *unused0, void *unused1, void *unused2)
     struct sensor_value pressure;
 
     int ret = device_is_ready(device);
-    if (ret) printk("Error %d: %s is not ready", ret, device->name);
+    if (ret) printk("Error %d: %s is not ready\n", ret, device->name);
 
     while (1) {
-        if (sensor_sample_fetch(device)) {
-            printk("LPS22HB: Failed to get data");
-        }
-
-        sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
-        sensor_channel_get(device, SENSOR_CHAN_PRESS, &pressure);
-
-        readings.lps22hb_temp = sensor_value_to_float(&temperature);
-        readings.lps22hb_press = sensor_value_to_float(&pressure);
-
-        printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
-
+        printk("LPS22HB task executing\n");
+        // if (sensor_sample_fetch(device)) {
+        //     printk("LPS22HB: Failed to get data");
+        // }
+        //
+        // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
+        // sensor_channel_get(device, SENSOR_CHAN_PRESS, &pressure);
+        //
+        // readings.lps22hb_temp = sensor_value_to_float(&temperature);
+        // readings.lps22hb_press = sensor_value_to_float(&pressure);
+        //
+        // printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
+        //
         k_msleep(100);
     }
 
@@ -81,16 +83,17 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
     struct sensor_value temperature;   
 
     int ret = device_is_ready(device);
-    if (ret) printk("Error %d: %s is not ready", ret, device->name);
+    if (ret) printk("Error %d: %s is not ready\n", ret, device->name);
 
     while (1) {
-        if (sensor_sample_fetch(device)) continue;
-
-        sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
-
-        readings.tmp117_temp = sensor_value_to_float(&temperature);
-
-        printk("TMP117: %f C\n", readings.tmp117_temp);
+        printk("TMP117 task executing\n");
+        // if (sensor_sample_fetch(device)) continue;
+        //
+        // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
+        //
+        // readings.tmp117_temp = sensor_value_to_float(&temperature);
+        //
+        // printk("TMP117: %f C\n", readings.tmp117_temp);
         k_msleep(100);
     }
 
@@ -101,7 +104,7 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
 int sensor_init() {
     k_thread_entry_t sensor_tasks[] = {update_sht30d_readings, update_lps22hb_readings, update_tmp117_readings};
     for (int i = 0; i < NUM_SENSORS; i++) {
-        k_thread_create(&sensor_threads[i], &sensor_stacks[i][0], STACK_SIZE, sensor_tasks[i], NULL, NULL, NULL, K_PRIO_PREEMPT(0), 0, K_NO_WAIT);
+        k_thread_create(&sensor_threads[i], &sensor_stacks[i][0], STACK_SIZE, sensor_tasks[i], NULL, NULL, NULL, K_PRIO_PREEMPT(10), 0, K_NO_WAIT);
     }
     
     return 0;
