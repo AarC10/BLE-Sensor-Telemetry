@@ -30,14 +30,15 @@
 LOG_MODULE_REGISTER(main);
 
 int main(void) {
- //    int err = button_init(NULL);
- //    if (err) return err;
-	//
-	// err = led_init();
- //    if (err) return err;
-	//
- //    err = bt_init();
- //    if (err) return err;
-	//
+    int err = button_init(NULL);
+    if (err) return err;
+
+	err = led_init();
+    if (err) return err;
+
+    err = bt_init();
+    if (err) return err;
+
     return sensor_init();
+
 }
