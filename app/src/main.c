@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2015-2016 Intel Corporation
  * Copyright (c) 2019 Marcio Montenegro <mtuxpe@gmail.com>
