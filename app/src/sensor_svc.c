@@ -11,6 +11,9 @@
 static K_THREAD_STACK_ARRAY_DEFINE(sensor_stacks, NUM_SENSORS, STACK_SIZE);
 static struct k_thread sensor_threads[NUM_SENSORS] = {0};
 
+static K_THREAD_STACK_DEFINE(print_stack, 128);
+static struct k_thread print_thread = {0};
+
 SENSOR_DATA_T readings = {0};
 
 
@@ -42,8 +45,7 @@ static void update_sht30d_readings(void *unused0, void *unused1, void *unused2) 
         readings.sht30d_temp = sensor_value_to_float(&temperature);
         readings.sht30d_hum  = sensor_value_to_float(&humidity);
 
-        printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
-        k_msleep(500);
+        k_msleep(100);
     }
 }
 
@@ -67,9 +69,8 @@ static void update_lps22hb_readings(void *unused0, void *unused1, void *unused2)
         readings.lps22hb_temp = sensor_value_to_float(&temperature);
         readings.lps22hb_press = sensor_value_to_float(&pressure);
 
-        printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
 
-        k_msleep(500);
+        k_msleep(100);
     }
 
 } 
@@ -90,11 +91,17 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
 
         readings.tmp117_temp = sensor_value_to_float(&temperature);
 
+        k_msleep(100);
+    }
+}
+
+static void print_readings(void *unused, void *unused1, void *unused2) {
+    while (1) {
         printk("TMP117: %f C\n", readings.tmp117_temp);
+        printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
+        printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
         k_msleep(500);
     }
-
-
 }
 
 
@@ -102,7 +109,11 @@ int sensor_init() {
     k_thread_entry_t sensor_tasks[] = {update_sht30d_readings, update_lps22hb_readings, update_tmp117_readings};
     for (int i = 0; i < NUM_SENSORS; i++) {
         k_thread_create(&sensor_threads[i], &sensor_stacks[i][0], STACK_SIZE, sensor_tasks[i], NULL, NULL, NULL, K_PRIO_PREEMPT(10), 0, K_NO_WAIT);
+        k_thread_start(&sensor_threads[i]);
     }
-    
+
+    k_thread_create(&print_thread, &print_stack[0], 128, print_readings, NULL, NULL, NULL, K_PRIO_PREEMPT(10), 0, K_NO_WAIT);
+    k_thread_start(&print_thread);
+
     return 0;
 }
