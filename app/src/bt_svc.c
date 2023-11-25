@@ -37,6 +37,11 @@ struct bt_uuid_128 st_service_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x0000fe40, 0xcc7a, 0x482a, 0x984a, 0x7f2ed5b3e58f)
 );
 
+/* AmbiSens Sensor Readings Service */
+struct bt_uuid_128 sensor_service_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0x0000feed, 0x1234, 0x5678, 0x9abc, 0xdef012345678)
+);
+
 /* ST LED service */
 struct bt_uuid_128 led_char_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x0000fe41, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
@@ -47,11 +52,10 @@ struct bt_uuid_128 but_notif_uuid = BT_UUID_INIT_128(
 	BT_UUID_128_ENCODE(0x0000fe42, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
 );
 
-/* AmbiSens Sensor Readings Service */
-struct bt_uuid_128 sensor_service_uuid = BT_UUID_INIT_128(
-	BT_UUID_128_ENCODE(0x0000fe43, 0x8e22, 0x4541, 0x9d4c, 0x21edae82ed19)
+/* Sensor Data Characteristic */
+struct bt_uuid_128 sensor_data_char_uuid = BT_UUID_INIT_128(
+    BT_UUID_128_ENCODE(0x0000feed, 0xfeed, 0xdead, 0xbeef, 0x000000000001)
 );
-
 
 /* Advertising data */
 uint8_t manuf_data[ADV_LEN] = {
@@ -86,9 +90,21 @@ BT_GATT_SERVICE_DEFINE(stsensor_svc,
                     BT_GATT_CHARACTERISTIC(&but_notif_uuid.uuid, BT_GATT_CHRC_NOTIFY, 
                                            BT_GATT_PERM_READ, NULL, NULL, &but_val),
 
-                    // BT_GATT_CHARACTERISTIC(&sensor_service_uuid.uuid, BT_GATT_CHRC_BROADCAST, BT_GATT_PERM_READ, NULL, NULL, &readings),
 
                     BT_GATT_CCC(mpu_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+);
+
+
+
+BT_GATT_SERVICE_DEFINE(sensor_svc,
+    BT_GATT_PRIMARY_SERVICE(&sensor_service_uuid),
+
+    BT_GATT_CHARACTERISTIC(&sensor_data_char_uuid.uuid,
+        BT_GATT_CHRC_READ | BT_GATT_CHRC_NOTIFY,
+        BT_GATT_PERM_READ,
+        NULL, NULL, &readings),
+
+    BT_GATT_CCC(sensor_ccc_cfg_changed, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
 );
 
 
@@ -123,6 +139,12 @@ void mpu_ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value) {
 	LOG_INF("Notification %s", notify_enable ? "enabled" : "disabled");
 }
 
+void sensor_ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value) {
+	ARG_UNUSED(attr);
+	notify_enable = (value == BT_GATT_CCC_NOTIFY);
+	LOG_INF("Notification %s", notify_enable ? "enabled" : "disabled");
+}
+
 void bt_ready(int err) {
 	if (err) {
 		LOG_ERR("Bluetooth init failed (err %d)", err);
@@ -151,4 +173,8 @@ int bt_init() {
 
 int bt_handle_button_cb(uint16_t *but_val) {
     return bt_gatt_notify(NULL, &stsensor_svc.attrs[4], but_val, sizeof(but_val));
+}
+
+int notify_sensor_data() {
+    return bt_gatt_notify(NULL, &sensor_svc.attrs[1], &readings, sizeof(readings));
 }

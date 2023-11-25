@@ -25,12 +25,15 @@ ssize_t recv(struct bt_conn *conn, const struct bt_gatt_attr *attr, const void *
 
 void mpu_ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value);
 
+void sensor_ccc_cfg_changed(const struct bt_gatt_attr *attr, uint16_t value);
+
 void bt_ready(int err);
 
 int bt_init();
 
 int bt_handle_button_cb(uint16_t *but_val);
 
+int notify_sensor_data();
 #ifdef __cplusplus
 }
 #endif
