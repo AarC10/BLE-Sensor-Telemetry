@@ -40,5 +40,4 @@ int main(void) {
     if (err) return err;
 
     return sensor_init();
-
 }

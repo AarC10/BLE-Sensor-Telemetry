@@ -43,7 +43,7 @@ static void update_sht30d_readings(void *unused0, void *unused1, void *unused2) 
         readings.sht30d_hum  = sensor_value_to_float(&humidity);
 
         printk("SHT30D: %f C\t %f Pa\n", readings.sht30d_temp, readings.sht30d_hum);
-        k_msleep(100);
+        k_msleep(500);
     }
 }
 
@@ -58,9 +58,9 @@ static void update_lps22hb_readings(void *unused0, void *unused1, void *unused2)
 
     while (1) {
         // if (sensor_sample_fetch(device)) {
-        //     printk("LPS22HB: Failed to get data");
+        //      printk("LPS22HB: Failed to get data");
         // }
-
+        //
         // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
         // sensor_channel_get(device, SENSOR_CHAN_PRESS, &pressure);
 
@@ -69,7 +69,7 @@ static void update_lps22hb_readings(void *unused0, void *unused1, void *unused2)
 
         printk("LPS22HB: %f C\t %f Pa\n", readings.lps22hb_temp, readings.lps22hb_press);
 
-        k_msleep(100);
+        k_msleep(500);
     }
 
 } 
@@ -84,14 +84,14 @@ static void update_tmp117_readings(void *unused0, void *unused1, void *unused2) 
     if (ret) printk("Error %d: %s is not ready\n", ret, device->name);
 
     while (1) {
-        // if (sensor_sample_fetch(device)) continue;
+        if (sensor_sample_fetch(device)) continue;
         
-        // sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
+        sensor_channel_get(device, SENSOR_CHAN_AMBIENT_TEMP, &temperature);
 
         readings.tmp117_temp = sensor_value_to_float(&temperature);
 
         printk("TMP117: %f C\n", readings.tmp117_temp);
-        k_msleep(100);
+        k_msleep(500);
     }
 
 
