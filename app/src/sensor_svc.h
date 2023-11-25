@@ -24,7 +24,7 @@ typedef struct {
     float sht30d_hum;
 } SENSOR_DATA_T;
 
-int init_sensor_tasks();
+int sensor_init();
 
 #ifdef __cplusplus
 }

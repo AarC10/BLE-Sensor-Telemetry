@@ -21,9 +21,11 @@
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/uuid.h>
 #include <zephyr/bluetooth/gatt.h>
+
 #include "bt_svc.h"
 #include "button_svc.h"
 #include "led_svc.h"
+#include "sensor_svc.h"
 
 LOG_MODULE_REGISTER(main);
 
@@ -37,5 +39,5 @@ int main(void) {
     err = bt_init();
     if (err) return err;
 
-	return 0;
+    return sensor_init();
 }
