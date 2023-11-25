@@ -31,7 +31,7 @@
     };
 
     lps22hb: lps22hb@5c {
-    	compatible = "ti,tmp116";
+    	compatible = "st,lps22hb-press";
 	    reg = <0x5c>;
   	    status = "okay";
     };
