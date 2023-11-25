@@ -11,7 +11,7 @@
 static K_THREAD_STACK_ARRAY_DEFINE(sensor_stacks, NUM_SENSORS, STACK_SIZE);
 static struct k_thread sensor_threads[NUM_SENSORS] = {0};
 
-static K_THREAD_STACK_DEFINE(print_stack, 128);
+static K_THREAD_STACK_DEFINE(print_stack, STACK_SIZE);
 static struct k_thread print_thread = {0};
 
 SENSOR_DATA_T readings = {0};
@@ -112,7 +112,7 @@ int sensor_init() {
         k_thread_start(&sensor_threads[i]);
     }
 
-    k_thread_create(&print_thread, &print_stack[0], 128, print_readings, NULL, NULL, NULL, K_PRIO_PREEMPT(10), 0, K_NO_WAIT);
+    k_thread_create(&print_thread, &print_stack[0], STACK_SIZE, print_readings, NULL, NULL, NULL, K_PRIO_PREEMPT(10), 0, K_NO_WAIT);
     k_thread_start(&print_thread);
 
     return 0;
