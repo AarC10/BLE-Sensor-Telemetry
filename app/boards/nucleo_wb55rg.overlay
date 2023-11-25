@@ -10,15 +10,18 @@
 	clock-frequency = <I2C_BITRATE_FAST>;
 
 
-    bmp388: bmp388@77 {
+    bmp388: bmp388@48 {
     	compatible = "bosch,bmp388";
-	    reg = <0x77>;
+	    reg = <0x48>;
+  	    status = "okay";
     };
 
-    tmp117: tmp117@48 {
+    tmp117: tmp117@01 {
     	compatible = "ti,tmp116";
-	    reg = <0x48>;
-   		#address-cells = <1>;
+	    reg = <0x01>;
+  	    status = "okay";
+   		
+        #address-cells = <1>;
     	#size-cells = <0>;
 	    eeprom: ti_tmp116_eeprom@0 {
 		    compatible = "ti,tmp116-eeprom";
@@ -30,14 +33,16 @@
     lps22hb: lps22hb@5c {
     	compatible = "ti,tmp116";
 	    reg = <0x5c>;
+  	    status = "okay";
     };
 
     shtc3: shtc3@70 {
-        compatible = "sensiron,shtcx";
+        compatible = "sensirion,shtcx";
         reg = <0x70>;
+      	status = "okay";
+
         chip = "shtc3";
-        measure_mode = "normal";
-        clock-stretching = "false";
+        measure-mode = "normal";
     };
 
 };
