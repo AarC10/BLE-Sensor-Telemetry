@@ -1,0 +1,12 @@
+/*
+ * Copyright (c) 2023 Aaron Chan
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/ {
+	&i2c1: i2c1 {
+         
+
+	};
+};
+
