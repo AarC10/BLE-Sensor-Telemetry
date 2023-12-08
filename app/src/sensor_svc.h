@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-typedef struct {
+typedef struct __attribute__((__packed__)) {
     float lps22hb_temp;
     float lps22hb_press;
 
