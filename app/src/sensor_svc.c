@@ -104,7 +104,7 @@ static void print_readings(void *unused, void *unused1, void *unused2) {
         MOVE_CURSOR_STR(3, 1);
         printk("SHT30D: %f C\t %f%%", readings.sht30d_temp, readings.sht30d_hum);
 
-        printk("Notified: %d", notify_sensor_data());
+        printk("Notified: %d", notify_sensor_data(&readings));
         k_msleep(100);
     }
 }
