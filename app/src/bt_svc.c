@@ -162,5 +162,5 @@ int bt_handle_button_cb(uint16_t *but_val) {
 }
 
 int notify_sensor_data() {
-    return bt_gatt_notify(NULL, &stsensor_svc.attrs[5], &readings, sizeof(SENSOR_DATA_T));
+    return bt_gatt_notify(NULL, &stsensor_svc.attrs[3], &readings, sizeof(SENSOR_DATA_T));
 }
